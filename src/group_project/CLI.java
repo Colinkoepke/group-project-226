@@ -3,9 +3,11 @@ package group_project;
 import java.util.Scanner;
 
 /**
- * Simple Command Line Interface for project
+ * Simple Command Line Interface for project.
+ * TODO:
  * Some of these functions mainly getStudentInfo() & getGrades() could be refactored
  * since they are pretty long. If time permits it, I will organize this further.
+ * There are also still some small logic issue, mainly just formatting
  * @author Brandon Manke
  */
 public class CLI {
@@ -32,26 +34,25 @@ public class CLI {
         while (running) {
             String input = getInput();
 
-            if (input.isEmpty()) {
-                System.out.println();
+            while (input.isEmpty()) {
                 System.err.println("Invalid input, please try again.");
                 input = getInput();
+            }
+
+            if (input.equals("help")) {
+                printHelp();
+            } else if (input.equals("e")) {
+                System.out.println("Exiting program...");
+                running = false;
+            } else if ((Character.toString(input.charAt(0))).equals("a")) { // check for a in statement
+                addFile(input);
+            } else if ((Character.toString(input.charAt(0))).equals("s")) { // check for s in statement
+                studentInfo(input);
+            } else if ((Character.toString(input.charAt(0))).equals("g")) { // check for g in statement
+                getGrades(input);
             } else {
-                if (input.equals("help")) {
-                    printHelp();
-                } else if (input.equals("e")) {
-                    System.out.println("Exiting program...");
-                    running = false;
-                } else if ((Character.toString(input.charAt(0))).equals("a")) { // check for a in statement
-                    addFile(input);
-                } else if ((Character.toString(input.charAt(0))).equals("s")) { // check for s in statement
-                    studentInfo(input);
-                } else if ((Character.toString(input.charAt(0))).equals("g")) { // check for g in statement
-                    getGrades(input);
-                } else {
-                    System.out.println();
-                    System.err.println("Invalid input, please try again.");
-                }
+                System.out.println();
+                System.err.println("Invalid input, please try again.");
             }
         }
     }
