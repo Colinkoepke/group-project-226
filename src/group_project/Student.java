@@ -1,9 +1,10 @@
 package group_project;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Consider adding first name and last names to this. Depends on how reader reads values
+ * Consider adding first name and last names to this. Depends on how reader reads values.
  * @author Brandon Manke
  */
 public class Student {
