@@ -1,18 +1,19 @@
 package group_project;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
+ * Consider adding first name and last names to this. Depends on how reader reads values
  * @author Brandon Manke
  */
 public class Student {
     private String name;
     private String userID;
-    private ArrayList<Integer> assignments;
+    private HashMap<String,Integer> assignments;
     private double totalGrade;
     private char letterGrade;
 
-    public Student(String name, String userID, ArrayList<Integer> assignments, double totalGrade, char letterGrade) {
+    public Student(String name, String userID, HashMap<String,Integer> assignments, double totalGrade, char letterGrade) {
         this.name = name;
         this.userID = userID;
         this.assignments = assignments;
@@ -24,7 +25,8 @@ public class Student {
 
     public String getUserID() { return userID; }
 
-    public ArrayList<Integer> getAssignments() { return assignments; }
+    // maybe rework this
+    public HashMap<String,Integer> getAssignments() { return assignments; }
 
     public double getTotalGrade() { return totalGrade; }
 
@@ -39,6 +41,5 @@ public class Student {
         this.userID = userID;
         return userID;
     }
-
 
 }
