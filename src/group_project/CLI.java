@@ -5,6 +5,7 @@ import java.util.Scanner;
 /**
  * Simple Command Line Interface for project.
  * TODO:
+ * Handle typing 'none' in g input
  * Some of these functions mainly getStudentInfo() & getGrades() could be refactored
  * since they are pretty long. If time permits it, I will organize this further.
  * There are also still some small logic issue, mainly just formatting
