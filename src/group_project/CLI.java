@@ -76,7 +76,7 @@ public class CLI {
         System.out.println(
                         "a <filename> - to read and add file to data repo\n" +
                         "s <studentid> - to display info for student based on id\n" +
-                        "g <coursenumber> &&|| <semester&year> - to display grades for specified course\n" +
+                        "g <coursenumber> AND/OR <semester&year> - to display grades for specified course\n" +
                         "e - exit program");
     }
 
@@ -119,24 +119,30 @@ public class CLI {
             if (split.length == 3) {
                 studentID = split[1];
                 fileName = split[2];
+                System.out.println("Exporting student info..");
+                // get student info function:
+                // ...
             } else if (split.length == 2) {
                 studentID = split[1];
                 do {
                     System.out.println("Please enter the name of the export file:");
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
+                System.out.println("Exporting student info..");
                 // get student info function:
                 // ...
             } else if (split.length == 1) {
                 do {
                     System.out.println("Please enter the students id:");
                     studentID = scanner.nextLine();
+                    studentID = studentID.toLowerCase();
                 } while (studentID.isEmpty());
 
                 do {
                     System.out.println("Please enter the name of the export file:");
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
+                System.out.println("Exporting student info..");
                 // get student info function:
                 // ...
             } else {
@@ -151,7 +157,7 @@ public class CLI {
 
     /**
      * We can check for "none" inputs - when we pass the
-     * params { courseNumber, semester, year} into the get grades function.
+     * params { courseNumber, semester, year } into the get grades function.
      * @param input {String} - Scanner input
      */
     private void getGrades(String input) {
@@ -164,19 +170,57 @@ public class CLI {
                 courseNumber = split[1];
                 semester = split[2];
                 year = split[3];
+                if (courseNumber.equals("none") && (semester.equals("none") || year.equals("none"))) {
+                    return;
+                }
+                System.out.println("Getting grade info..");
                 // pass into function
                 // ...
             } else if (split.length == 2) {
                 courseNumber = split[1];
                 do {
-                    System.out.println("Please enter the semester of the class:"); // need input validation
+                    System.out.println("Please enter the semester of the class: (enter 'none' if unknown)"); // need input validation
                     semester = scanner.nextLine();
+                    semester = semester.toLowerCase();
                 } while (semester.isEmpty());
 
                 do {
-                    System.out.println("Please enter the year of the class:");
+                    System.out.println("Please enter the year of the class: (enter 'none' if unknown)");
                     year = scanner.nextLine();
+                    year = year.toLowerCase();
                 } while (year.isEmpty());
+
+                if (courseNumber.equals("none") && (semester.equals("none") || year.equals("none"))) {
+                    return;
+                }
+                System.out.println("Getting grade info..");
+                // pass into function
+                // ...
+            } else if (split.length == 1) {
+                do {
+                    System.out.println("Please enter the course number of the class: (enter 'none' if unknown)"); // need input validation
+                    courseNumber = scanner.nextLine();
+                    courseNumber = courseNumber.toLowerCase();
+                } while (courseNumber.isEmpty());
+
+                do {
+                    System.out.println("Please enter the semester of the class: (enter 'none' if unknown)"); // need input validation
+                    semester = scanner.nextLine();
+                    semester = semester.toLowerCase();
+                } while (semester.isEmpty());
+
+                do {
+                    System.out.println("Please enter the year of the class: (enter 'none' if unknown)");
+                    year = scanner.nextLine();
+                    year = year.toLowerCase();
+                } while (year.isEmpty());
+
+                if (courseNumber.equals("none") && (semester.equals("none") || year.equals("none"))) {
+                    return;
+                }
+                System.out.println("Getting grade info..");
+                // pass into function
+                // ...
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");
