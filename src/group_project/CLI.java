@@ -14,14 +14,10 @@ public class CLI {
     private Scanner scanner = new Scanner(System.in);
     private boolean running = true;
 
-    public CLI() {
-        super();
-    }
+    public CLI() { super(); }
 
     // if you want to specify a scanner
-    public CLI(Scanner scanner) {
-        this.scanner = scanner;
-    }
+    public CLI(Scanner scanner) { this.scanner = scanner; }
 
     /**
      * Main CLI loop, handles all of the commands and passes them onto
