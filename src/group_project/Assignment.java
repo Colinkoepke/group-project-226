@@ -23,7 +23,7 @@ public class Assignment {
 
     public int setGrade(int grade) {
         if (grade < 0) {
-            throw new IllegalArgumentException;
+            throw new IllegalArgumentException();
         }
         this.grade = grade;
         return grade;
