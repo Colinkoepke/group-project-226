@@ -57,6 +57,4 @@ public class Student {
         this.assignments = assignments;
         return assignments;
     }
-
-
 }

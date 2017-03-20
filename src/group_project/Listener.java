@@ -1,5 +1,9 @@
 package group_project;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * @author Brandon Manke
  */
@@ -18,8 +22,37 @@ public class Listener {
      * the csv file to be sent to the repository.
      */
     public Course addFile(String fileName) {
-        // TODO
-        return null;
+        // TODO: Current issues last name is printed twice in student object, also '"' in name throw errors
+        String[] formattedName = formatFileName(fileName);
+        CsvReader reader = new CsvReader();
+
+        Course course = new Course();
+        course.setName(formattedName[0]);
+        course.setSemester(formattedName[1]);
+        course.setYear(Integer.parseInt(formattedName[2]));
+
+        File folder = new File("data/");
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            System.out.println(file.getName());
+            if (file.isFile() && (file.getName() == fileName)) {
+                // wtf
+                try {
+                    ArrayList<Student> students = new ArrayList<>(reader.read(file));
+                    for (Student student : students) {
+                        student.setAllAssignments(
+                                formatAssignments(student.getAssignments(), reader.getAssignmentHeads())
+                        );
+                    }
+                    course.addAllStudents(students);
+                } catch (IOException e) {
+                    System.err.println("File read error");
+                    e.getStackTrace();
+                }
+            }
+        }
+        Repository.pushCourses(course);
+        return course;
     }
 
     /**
@@ -48,4 +81,18 @@ public class Listener {
         // TODO
         return null;
     }
+
+    private static String[] formatFileName(String fileName) {
+        String temp = fileName.split("\\.")[0]; // removes csv extension from file
+        String[] formatted = temp.split("[-\\s]"); // puts remaining file into array so parts can be read
+        return formatted;
+    }
+
+    private static ArrayList<Assignment> formatAssignments(ArrayList<Assignment> assignments, ArrayList<String> header) {
+        for (int i = 0; i < assignments.size(); i++) {
+            assignments.get(i).setName(header.get(i)); // maybe this works idfk
+        }
+        return assignments;
+    }
+
 }

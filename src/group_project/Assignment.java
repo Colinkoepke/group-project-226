@@ -12,6 +12,10 @@ public class Assignment {
         this.grade = grade;
     }
 
+    public Assignment() {
+        super();
+    }
+
     public String getName() { return name; }
 
     public int getGrade() { return grade; }

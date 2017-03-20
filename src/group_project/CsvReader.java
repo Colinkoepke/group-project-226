@@ -4,25 +4,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
+public class CsvReader {
 
-public class CsvReader
-{
-	private List<String> assignmentHeads = new ArrayList<String>();
+	private ArrayList<String> assignmentHeads = new ArrayList<String>();
 	
-	public List<Student> read (File csvFile) throws IOException{
+	public List<Student> read(File csvFile) throws IOException{
 		
 		List<Student> parsedList = new ArrayList<Student>();
 		List<List<String>> data = new ArrayList<List<String>>();//Holds each row of data 
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 		String line = null;
 		int passHeader = 0; 
-		
+
+        System.out.println("In read");
 		//Reading Each line of the file 
 		while((line = reader.readLine())!= null){
 			String [] temp = line.split(",");//Splitting up the line of read data 
@@ -31,10 +28,12 @@ public class CsvReader
 			//Adding the read row of elements to the list of data
 			row = Arrays.asList(temp);
 			data.add(row);
-			
-			if(passHeader == 0){
-				assignmentHeads.addAll(parseHeaders(row));
-				passHeader ++; 
+
+            System.out.println("In read before passHeader");
+            if(passHeader == 0) {
+                System.out.println("In passHeader == 0");
+                assignmentHeads.addAll(parseHeaders(row));
+				passHeader++;
 			}else{
 				parsedList.add(parseData(data, row));
 			}
@@ -42,57 +41,59 @@ public class CsvReader
 		}
 		reader.close();
 		data.clear();
+        for (Student stu : parsedList) {
+            System.out.println("Name: " + stu.getName());
+        }
 		return parsedList;
-		
-		
 	}
 	
 	public List<String> parseHeaders(List<String> row){
 		Iterator <String> listRow = row.iterator();
 		List<String> parsedHeadingRow = new ArrayList<String>();
 		String hGrade = " ", hId = " ", hName = " ", hTotal = " ";
-		List<String> assignmentNam = new ArrayList<String>();
-		
-		/**
-		*Taking data from file and assigning universal headers for easy data manipulation 
-		*/
+		List<String> assignmentName = new ArrayList<String>();
+
+        /**
+        *Taking data from file and assigning universal headers for easy data manipulation
+        */
 		while(listRow.hasNext()){
-			if(listRow.next().toLowerCase().contains("name")){
+            String nextLine = listRow.next();
+			if(nextLine.toLowerCase().contains("name")){
 				String hFName, hLName;
 					
-				if(listRow.next().toLowerCase().equals("student name") || listRow.next().toLowerCase().equals("name")){
-					hName = listRow.next();
+				if(nextLine.toLowerCase().equals("student name") || nextLine.toLowerCase().equals("name")){
+					hName = nextLine;
 					parsedHeadingRow.add(hName);
 				}
-				else if(listRow.next().toLowerCase().contains("first")){
-					hFName = listRow.next();
-					hLName = listRow.next();
+				else if(nextLine.toLowerCase().contains("first")){
+					hFName = nextLine;
+					hLName = nextLine;
 					hName = hFName + hLName;
 					parsedHeadingRow.add(hName);
 				}
-				else if(listRow.next().toLowerCase().contains("last")){
-					hLName = listRow.next();
-					hFName = listRow.next();
+				else if(nextLine.toLowerCase().contains("last")){
+					hLName = nextLine;
+					hFName = nextLine;
 					hName = hFName + hLName;
 					parsedHeadingRow.add(hName);
 				}
 			}
-			else if(listRow.next().toLowerCase().contains("id")){
-				hId = listRow.next();
+			else if(nextLine.toLowerCase().contains("id")){
+				hId = nextLine;
 				parsedHeadingRow.add(hId);
 			}
-			else if(listRow.next().toLowerCase().contains("grade")){
-				hGrade = listRow.next();
+			else if(nextLine.toLowerCase().contains("grade")){
+				hGrade = nextLine;
 				parsedHeadingRow.add(hGrade);
 			}
-			else if(listRow.next().toLowerCase().contains("total")){
-				hTotal = listRow.next();
+			else if(nextLine.toLowerCase().contains("total")){
+				hTotal = nextLine;
 				parsedHeadingRow.add(hTotal);
 			}else{
-				assignmentNam.add(listRow.next());		
+				assignmentName.add(nextLine);
 			}
 		}
-		return assignmentNam;
+		return assignmentName;
 	}
 	
 	public Student parseData(List<List<String>> data, List<String> row){
@@ -102,48 +103,72 @@ public class CsvReader
 		 * string values to needed data fields
 		 */
 		 String name = "", id = " ";
-		 ArrayList<Integer> assignments = new ArrayList<Integer>();
-		 Student stud = null;
+		 ArrayList<Assignment> assignments = new ArrayList<>();
+		 Student student = null;
 		 double totGrade = 0;
 		 char letGrade = '\0';
 		 
 		 Iterator <List<String>> dataIter = data.iterator();//to get the read data
-		 Iterator <String> headerRowIter = dataIter.next().iterator();//to iterate through the headerRow
+         List<String> dataLine = dataIter.next();
+		 Iterator <String> headerRowIter = dataLine.iterator();//to iterate through the headerRow
 	
 		 while(headerRowIter.hasNext()){
 			 Iterator <String> rowIter = row.iterator();//Iterate through the row being read in csv file
 			 while(rowIter.hasNext()){
-				 if(headerRowIter.next().toLowerCase().contains("name")){
+                 String headerLine = headerRowIter.next();
+                 String line = rowIter.next();
+                 System.out.println("header line: " + headerLine);
+				 if(headerLine.toLowerCase().contains("name")){
 					 String fName = " ", lName = " ";
-					 if(headerRowIter.next().toLowerCase().equals("student name") || headerRowIter.next().toLowerCase().equals("name")){
-							name = rowIter.next();
+					 if(headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")){
+							name = line;
 						}
-						else if(headerRowIter.next().toLowerCase().contains("first")){
-							fName = rowIter.next();
-							lName = rowIter.next();
+						else if(headerLine.toLowerCase().contains("first")){
+							fName = line;
+							lName = line;
 							name = fName + lName;
 						}
-						else if(headerRowIter.next().toLowerCase().contains("last")){
-							lName = rowIter.next();
-							fName = rowIter.next();
+						else if(headerLine.toLowerCase().contains("last")){
+							lName = line;
+							fName = line;
 							name = fName + lName;
 						}
 				 }
-				 else if(headerRowIter.next().toLowerCase().contains("id")){
-					 id = rowIter.next();
+				 else if(headerLine.toLowerCase().contains("user")){
+					 id = line;
 				 }
-				 else if (headerRowIter.next().toLowerCase().contains("grade")){
-					 letGrade = rowIter.next().charAt(0);
+				 else if (headerLine.toLowerCase().contains("grade")){
+					 letGrade = line.charAt(0);
 				 }
-				 else if (headerRowIter.next().toLowerCase().contains("total")){
-					 totGrade = Double.parseDouble(rowIter.next());
-				 }else {
-					 assignments.add(Integer.parseInt(rowIter.next()));	
+				 else if (headerLine.toLowerCase().contains("total")){
+					 totGrade = Double.parseDouble(line);
+				 } else {
+					 Assignment assignment = new Assignment();
+					 int grade = Integer.parseInt(line);
+					 assignment.setGrade(grade);
+					 assignments.add(assignment);
 				 }
 			 }
 		 }
-		 stud = new Student(name, id, assignments, totGrade, letGrade);
-		 return stud;
+		 student = new Student(name, id, assignments, totGrade, letGrade);
+		 return student;
 	}
+
+    public ArrayList<String> getAssignmentHeads() {
+        return assignmentHeads;
+    }
+
+    public ArrayList<String> formatAssignmentHeaders() {
+        ArrayList<String> projectNames = new ArrayList<>();
+        for (String str : assignmentHeads) {
+            String temp = str.toLowerCase();
+            // checks if it's not an assignment name
+            if (temp.contains("name") || temp.contains("total") ||
+                    temp.contains("id") || temp.contains("grade")) {
+                projectNames.add(str);
+            }
+        }
+        return projectNames;
+    }
 	
 }

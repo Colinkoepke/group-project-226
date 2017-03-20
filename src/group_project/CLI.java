@@ -90,12 +90,16 @@ public class CLI {
                 System.out.println("Reading: " + fileName);
                 // read file function here:
                 // ...
+                listener.addFile(fileName);
+                //System.out.println("name " + crs.getName() + " semester: " + crs.getSemester() + "year " + crs.getYear());
             } else if (split.length == 1) {
                 System.out.println("Please enter the file name:");
                 fileName = scanner.nextLine();
                 System.out.println("Reading: " + fileName);
                 // read file function here:
                 // ...
+                listener.addFile(fileName);
+                //System.out.println("name " + crs.getName() + " semester: " + crs.getSemester() + "year " + crs.getYear());
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");

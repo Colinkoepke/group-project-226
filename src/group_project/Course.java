@@ -48,6 +48,10 @@ public class Course {
         students.remove(index);
     }
 
+    public void addAllStudents(ArrayList<Student> students) {
+        this.students = students;
+    }
+
     public String setName(String name) {
         this.name = name;
         return name;

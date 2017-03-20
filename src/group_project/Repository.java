@@ -13,5 +13,10 @@ public class Repository {
 
     public static ArrayList<Course> getCourses() { return courses; }
 
-    public static void pushCourses(Course course) { courses.add(course); }
+    public static void pushCourses(Course course) {
+        if (course != null)
+            courses.add(course);
+        else
+            throw new IllegalArgumentException();
+    }
 }
