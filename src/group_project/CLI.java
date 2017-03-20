@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class CLI {
     private Scanner scanner = new Scanner(System.in);
     private boolean running = true;
+    private Listener listener = new Listener();
 
     public CLI() { super(); }
 

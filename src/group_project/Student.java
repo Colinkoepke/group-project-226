@@ -1,5 +1,6 @@
 package group_project;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,4 +42,21 @@ public class Student {
         this.userID = userID;
         return userID;
     }
+
+    public ArrayList<Assignment> pushAssignments(Assignment assignment) {
+        assignments.add(assignment);
+        return assignments;
+    }
+
+    public ArrayList<Assignment> removeAssignment(int index) {
+        assignments.remove(index);
+        return assignments;
+    }
+
+    public ArrayList<Assignment> setAllAssignments(ArrayList<Assignment> assignments) {
+        this.assignments = assignments;
+        return assignments;
+    }
+
+
 }
