@@ -19,6 +19,10 @@ public class Course {
         this.year = year;
     }
 
+    public Course() {
+        super();
+    }
+
     // getters
 
     public ArrayList<Student> getStudents() { return students; }
