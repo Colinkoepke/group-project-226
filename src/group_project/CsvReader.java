@@ -19,8 +19,7 @@ public class CsvReader {
 		String line = null;
 		int passHeader = 0; 
 
-        System.out.println("In read");
-		//Reading Each line of the file 
+		//Reading Each line of the file
 		while((line = reader.readLine())!= null){
 			String [] temp = line.split(",");//Splitting up the line of read data 
 			List<String> row = new ArrayList<String>();//Allows an undefined num of elements in the row
@@ -29,9 +28,7 @@ public class CsvReader {
 			row = Arrays.asList(temp);
 			data.add(row);
 
-            System.out.println("In read before passHeader");
             if(passHeader == 0) {
-                System.out.println("In passHeader == 0");
                 assignmentHeads.addAll(parseHeaders(row));
 				passHeader++;
 			}else{
@@ -41,9 +38,6 @@ public class CsvReader {
 		}
 		reader.close();
 		data.clear();
-        for (Student stu : parsedList) {
-            System.out.println("Name: " + stu.getName());
-        }
 		return parsedList;
 	}
 	
@@ -117,7 +111,6 @@ public class CsvReader {
 			 while(rowIter.hasNext()){
                  String headerLine = headerRowIter.next();
                  String line = rowIter.next();
-                 System.out.println("header line: " + headerLine);
 				 if(headerLine.toLowerCase().contains("name")){
 					 String fName = " ", lName = " ";
 					 if(headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")){

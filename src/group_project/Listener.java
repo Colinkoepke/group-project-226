@@ -22,7 +22,7 @@ public class Listener {
      * the csv file to be sent to the repository.
      */
     public Course addFile(String fileName) {
-        // TODO: Current issues last name is printed twice in student object, also '"' in name throw errors
+        // TODO: Current issues last name is printed twice (I think) in student object, also '"' in name throw errors
         String[] formattedName = formatFileName(fileName);
         CsvReader reader = new CsvReader();
 
