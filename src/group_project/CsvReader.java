@@ -21,11 +21,11 @@ public class CsvReader {
 
 		//Reading Each line of the file
 		while ((line = reader.readLine()) != null) {
-			String [] temp = line.split(","); //Splitting up the line of read data
+			String [] temp = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1); //Splitting up the line of read data
 			for (String s : temp) {
-				String str = s.replaceAll("^\"|\"$", "");
-				s = str;
-				//System.out.println(s);
+				//String str = s.replaceAll("^\"|\"$", "");
+				//s = str;
+				System.out.println(s);
 			}
 			List<String> row = new ArrayList<String>();//Allows an undefined num of elements in the row
 			
@@ -95,7 +95,7 @@ public class CsvReader {
 	 * string values to needed data fields
 	 */
 	public Student parseData(List<List<String>> data, List<String> row) {
-		 String name = "", id = "";
+		 String name = "", id = " ";
 		 ArrayList<Assignment> assignments = new ArrayList<>();
 		 Student student = null;
 		 double totGrade = 0;
@@ -111,18 +111,15 @@ public class CsvReader {
                  String headerLine = headerRowIter.next();
                  String line = rowIter.next();
 				 if (headerLine.toLowerCase().contains("name")) {
-					 String fName = " ", lName = " ";
+					 String fName = "", lName = "";
 					 if (headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")) {
 							name = line;
-						} else if (headerLine.toLowerCase().contains("first")) {
+					 } else if (headerLine.toLowerCase().contains("first")) {
 							fName = line;
+					 } else if(headerLine.toLowerCase().contains("last")) {
 							lName = line;
-							name = fName + lName;
-						} else if(headerLine.toLowerCase().contains("last")) {
-							lName = line;
-							fName = line;
-							name = fName + lName;
-						}
+					 }
+					 name = fName + lName;
 				 } else if(headerLine.toLowerCase().contains("user")) {
 					 id = line;
 				 } else if (headerLine.toLowerCase().contains("grade")) {
@@ -157,5 +154,4 @@ public class CsvReader {
         }
         return projectNames;
     }
-	
 }

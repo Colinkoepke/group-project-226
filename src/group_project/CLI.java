@@ -88,11 +88,21 @@ public class CLI {
                 fileName = split[1];
                 System.out.println("Reading: " + fileName);
                 listener.addFile(fileName);
+                for (Course c : Repository.getCourses()) {
+                    for (Student s : c.getStudents()) {
+                        System.out.println(s.getName());
+                    }
+                }
             } else if (split.length == 1) {
                 System.out.println("Please enter the file name:");
                 fileName = scanner.nextLine();
                 System.out.println("Reading: " + fileName);
                 listener.addFile(fileName);
+                for (Course c : Repository.getCourses()) {
+                    for (Student s : c.getStudents()) {
+                        System.out.println(s.getName());
+                    }
+                }
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");
