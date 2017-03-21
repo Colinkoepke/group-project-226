@@ -1,8 +1,11 @@
 package group_project;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -58,17 +61,23 @@ public class Writer {
 		Student student = null;
 		String testStudentID = null;
 		String assignmentName = null;
+		
+		
+		File file = new File("data/" + fileName + ".csv");
+		//FileWriter fileWriter = new FileWriter(file);
+		//PrintWriter outFile = new PrintWriter(fileWriter);
+		//ArrayList<String> outputList = new ArrayList<>();
 
 		//if file is not found
 		try {
-			writer = new FileWriter(fileName);
+			writer = new FileWriter(file);
+			BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
 
-		while (!listOfCourses.isEmpty()) {
-
+		if(!listOfCourses.isEmpty()){
 			for (int i = 0; i < listOfCourses.size(); i++) {
 				courseCounter = listOfCourses.get(i);
 				courseName = courseCounter.getName();
@@ -80,6 +89,7 @@ public class Writer {
 					student = studentsListed.get(j);
 					testStudentID = student.getUserID();
 					assignments = student.getAssignments();
+					
 					if (testStudentID.equals(studentID)) {
 						writer.append(NEW_LINE_SEPARATOR);
 						writer.append(studentID);
@@ -97,12 +107,51 @@ public class Writer {
 							writer.append(NEW_LINE_SEPARATOR);
 						}
 
-					} else
-						System.out.println("Student is not found");
+					} 
+				
 				}
 			}
 
 		}
+		/**if(!listOfCourses.isEmpty()){
+		for (int i = 0; i < listOfCourses.size(); i++) {
+			courseCounter = listOfCourses.get(i);
+			courseName = courseCounter.getName();
+			semester = courseCounter.getSemester();
+			year = (Integer) courseCounter.getYear();
+			studentsListed = courseCounter.getStudents();
+
+			for (int j = 0; j < studentsListed.size(); j++) {
+				student = studentsListed.get(j);
+				testStudentID = student.getUserID();
+				assignments = student.getAssignments();
+				
+				if (testStudentID.equals(studentID)) {
+					outputList.add(NEW_LINE_SEPARATOR);
+					outputList.add(studentID);
+					outputList.add(COMMA_DELIMITER);
+					outputList.add(courseName);
+					outputList.add(COMMA_DELIMITER);
+					outputList.add((semester));
+					outputList.add(COMMA_DELIMITER);
+					outputList.add(year.toString());
+					outputList.add(COMMA_DELIMITER);
+					for (int k = 0; k < assignments.size(); k++) {
+						outputList.add(assignments.get(k).getName());
+						outputList.add(COMMA_DELIMITER);
+						outputList.add(Integer.toString(assignments.get(k).getGrade()));
+						outputList.add(NEW_LINE_SEPARATOR);
+					}
+
+				} 
+			
+			}
+		}
+		for(int i = 0; i < outputList.size(); i++){
+			outFile.print(outputList.get(i));
+		}
+
+	}*/
 	}
 
 }

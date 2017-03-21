@@ -69,9 +69,14 @@ public class Listener {
      * @param exportFileName {String} - name of file to be created and exported
      * @return {Student} returns a student object possible to be passed somewhere? the return here is not finalized yet
      */
-    public Student getStudent(String userID, String exportFileName) {
-        // TODO
-        return null;
+    public void getStudent(String userID, String exportFileName) {
+        Writer writer = new Writer(userID, exportFileName);
+        try {
+			writer.writeToCSV();
+		} catch (IOException e) {
+			System.out.println("File not found");
+			e.printStackTrace();
+		}
     }
 
     /**
