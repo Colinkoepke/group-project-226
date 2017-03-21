@@ -11,7 +11,7 @@ public class CsvReader {
 
 	private ArrayList<String> assignmentHeads = new ArrayList<String>();
 	
-	public List<Student> read(File csvFile) throws IOException{
+	public List<Student> read(File csvFile) throws IOException {
 		
 		List<Student> parsedList = new ArrayList<Student>();
 		List<List<String>> data = new ArrayList<List<String>>();//Holds each row of data 
@@ -20,7 +20,7 @@ public class CsvReader {
 		int passHeader = 0; 
 
 		//Reading Each line of the file
-		while((line = reader.readLine())!= null){
+		while ((line = reader.readLine()) != null) {
 			String [] temp = line.split(",");//Splitting up the line of read data 
 			List<String> row = new ArrayList<String>();//Allows an undefined num of elements in the row
 			
@@ -31,7 +31,7 @@ public class CsvReader {
             if(passHeader == 0) {
                 assignmentHeads.addAll(parseHeaders(row));
 				passHeader++;
-			}else{
+			} else {
 				parsedList.add(parseData(data, row));
 			}
 			
@@ -41,7 +41,7 @@ public class CsvReader {
 		return parsedList;
 	}
 	
-	public List<String> parseHeaders(List<String> row){
+	public List<String> parseHeaders(List<String> row) {
 		Iterator <String> listRow = row.iterator();
 		List<String> parsedHeadingRow = new ArrayList<String>();
 		String hGrade = " ", hId = " ", hName = " ", hTotal = " ";
@@ -50,52 +50,46 @@ public class CsvReader {
         /**
         *Taking data from file and assigning universal headers for easy data manipulation
         */
-		while(listRow.hasNext()){
+		while (listRow.hasNext()) {
             String nextLine = listRow.next();
-			if(nextLine.toLowerCase().contains("name")){
+			if (nextLine.toLowerCase().contains("name")) {
 				String hFName, hLName;
-					
-				if(nextLine.toLowerCase().equals("student name") || nextLine.toLowerCase().equals("name")){
+				if (nextLine.toLowerCase().equals("student name") || nextLine.toLowerCase().equals("name")) {
 					hName = nextLine;
 					parsedHeadingRow.add(hName);
-				}
-				else if(nextLine.toLowerCase().contains("first")){
+				} else if (nextLine.toLowerCase().contains("first")){
 					hFName = nextLine;
 					hLName = nextLine;
 					hName = hFName + hLName;
 					parsedHeadingRow.add(hName);
-				}
-				else if(nextLine.toLowerCase().contains("last")){
+				} else if (nextLine.toLowerCase().contains("last")) {
 					hLName = nextLine;
 					hFName = nextLine;
 					hName = hFName + hLName;
 					parsedHeadingRow.add(hName);
 				}
-			}
-			else if(nextLine.toLowerCase().contains("id")){
+			} else if (nextLine.toLowerCase().contains("id")) {
 				hId = nextLine;
 				parsedHeadingRow.add(hId);
-			}
-			else if(nextLine.toLowerCase().contains("grade")){
+			} else if(nextLine.toLowerCase().contains("grade")) {
 				hGrade = nextLine;
 				parsedHeadingRow.add(hGrade);
-			}
-			else if(nextLine.toLowerCase().contains("total")){
+			} else if(nextLine.toLowerCase().contains("total")) {
 				hTotal = nextLine;
 				parsedHeadingRow.add(hTotal);
-			}else{
+			} else {
 				assignmentName.add(nextLine);
 			}
 		}
 		return assignmentName;
 	}
-	
-	public Student parseData(List<List<String>> data, List<String> row){
-		/**
-		 * This method is intended to make sure the data is stored 
-		 * to the in the same column as the parsed headers as well as converting
-		 * string values to needed data fields
-		 */
+
+	/**
+	 * This method is intended to make sure the data is stored
+	 * to the in the same column as the parsed headers as well as converting
+	 * string values to needed data fields
+	 */
+	public Student parseData(List<List<String>> data, List<String> row) {
 		 String name = "", id = " ";
 		 ArrayList<Assignment> assignments = new ArrayList<>();
 		 Student student = null;
@@ -106,34 +100,29 @@ public class CsvReader {
          List<String> dataLine = dataIter.next();
 		 Iterator <String> headerRowIter = dataLine.iterator();//to iterate through the headerRow
 	
-		 while(headerRowIter.hasNext()){
+		 while (headerRowIter.hasNext()) {
 			 Iterator <String> rowIter = row.iterator();//Iterate through the row being read in csv file
-			 while(rowIter.hasNext()){
+			 while (rowIter.hasNext()) {
                  String headerLine = headerRowIter.next();
                  String line = rowIter.next();
-				 if(headerLine.toLowerCase().contains("name")){
+				 if (headerLine.toLowerCase().contains("name")) {
 					 String fName = " ", lName = " ";
-					 if(headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")){
+					 if (headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")) {
 							name = line;
-						}
-						else if(headerLine.toLowerCase().contains("first")){
+						} else if (headerLine.toLowerCase().contains("first")) {
 							fName = line;
 							lName = line;
 							name = fName + lName;
-						}
-						else if(headerLine.toLowerCase().contains("last")){
+						} else if(headerLine.toLowerCase().contains("last")) {
 							lName = line;
 							fName = line;
 							name = fName + lName;
 						}
-				 }
-				 else if(headerLine.toLowerCase().contains("user")){
+				 } else if(headerLine.toLowerCase().contains("user")) {
 					 id = line;
-				 }
-				 else if (headerLine.toLowerCase().contains("grade")){
+				 } else if (headerLine.toLowerCase().contains("grade")) {
 					 letGrade = line.charAt(0);
-				 }
-				 else if (headerLine.toLowerCase().contains("total")){
+				 } else if (headerLine.toLowerCase().contains("total")) {
 					 totGrade = Double.parseDouble(line);
 				 } else {
 					 Assignment assignment = new Assignment();

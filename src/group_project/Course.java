@@ -35,11 +35,6 @@ public class Course {
 
     // setters - may need to add/remove some of these
 
-    public ArrayList<Student> setStudents(ArrayList<Student> students) {
-        this.students = students;
-        return students;
-    }
-
     public void pushStudent(Student student) {
         students.add(student);
     }

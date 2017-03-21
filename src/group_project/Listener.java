@@ -35,7 +35,7 @@ public class Listener {
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
             System.out.println(file.getName());
-            if (file.isFile() && (file.getName() == fileName)) {
+            if (file.isFile() && (file.getName().equals(fileName))) {
                 // wtf
                 try {
                     ArrayList<Student> students = new ArrayList<>(reader.read(file));
@@ -44,6 +44,7 @@ public class Listener {
                                 formatAssignments(student.getAssignments(), reader.getAssignmentHeads())
                         );
                     }
+                    System.out.println("Students size: " + students.size());
                     course.addAllStudents(students);
                 } catch (IOException e) {
                     System.err.println("File read error");
@@ -51,7 +52,12 @@ public class Listener {
                 }
             }
         }
-        Repository.pushCourses(course);
+
+        if (!fileAlreadyExists(course)) {
+            Repository.pushCourses(course);
+        } else {
+            System.out.println("That file already exists in the repository. \n");
+        }
         return course;
     }
 
@@ -93,6 +99,35 @@ public class Listener {
             assignments.get(i).setName(header.get(i)); // maybe this works idfk
         }
         return assignments;
+    }
+
+
+    /**
+     * Compares course to be added to all courses currently in repository, if it already exists then it returns true
+     * @param course { Course } - course object to compare to courses already in repository
+     */
+    private static boolean fileAlreadyExists(Course course) {
+        for (Course c : Repository.getCourses()) {
+            if ((c.getName().equals(course.getName())) &&
+                    (c.getSemester().equals(course.getSemester())) &&
+                    (c.getYear() == course.getYear())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * May or may not end up using this
+     * Reads & formats students from CsvReader, since it only returns a list of students
+     * We have to format it and put it into a course object
+     * @param reader { CsvReader } - Class that reads specified .csv files
+     * @param fileName { String } - Name of file to read
+     */
+    private static Course readAndFormatStudents(CsvReader reader, String fileName) {
+        Course course = new Course();
+
+        return course;
     }
 
 }
