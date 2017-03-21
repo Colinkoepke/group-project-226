@@ -126,6 +126,7 @@ public class CLI {
                 System.out.println("Exporting student info..");
                 // get student info function:
                 // ...
+                listener.getStudent(studentID, fileName);
             } else if (split.length == 2) {
                 studentID = split[1];
                 do {
@@ -133,8 +134,7 @@ public class CLI {
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
                 System.out.println("Exporting student info..");
-                // get student info function:
-                // ...
+                listener.getStudent(studentID, fileName);
             } else if (split.length == 1) {
                 do {
                     System.out.println("Please enter the students id:");
@@ -147,7 +147,7 @@ public class CLI {
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
                 System.out.println("Exporting student info..");
-                // get student info function:
+                listener.getStudent(studentID, fileName);
                 // ...
             } else {
                 System.out.println();

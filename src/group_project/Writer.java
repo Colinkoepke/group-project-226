@@ -1,8 +1,11 @@
 package group_project;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -10,18 +13,16 @@ import java.util.ArrayList;
  */
 public class Writer {
 
-	//student variables
+	// student variables
 	private String studentID;
 	private String fileName;
-	private Course course;
-	private Student student;
 
-	//student course variables
+	// student course variables
 	private String courseName;
 	private String semester;
 	private Integer year;
 
-	//assignment variable
+	// assignment variable
 	private ArrayList<Assignment> assignments;
 
 	// Delimiter used in CSV filE
@@ -57,18 +58,24 @@ public class Writer {
 		ArrayList<Student> studentsListed = new ArrayList<>();
 		Student student = null;
 		String testStudentID = null;
-		String assignmentName = null;
+		BufferedWriter bWriter = null;
 
-		//if file is not found
+		StringBuilder s = new StringBuilder();
+		s.append("data/");
+		s.append(fileName);
+
+		File file = new File(s.toString());
+
+		// if file is not found
 		try {
-			writer = new FileWriter(fileName);
+			writer = new FileWriter(file);
+			bWriter = new BufferedWriter(writer);
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();
 		}
 
-		while (!listOfCourses.isEmpty()) {
-
+		if (!listOfCourses.isEmpty()) {
 			for (int i = 0; i < listOfCourses.size(); i++) {
 				courseCounter = listOfCourses.get(i);
 				courseName = courseCounter.getName();
@@ -80,29 +87,32 @@ public class Writer {
 					student = studentsListed.get(j);
 					testStudentID = student.getUserID();
 					assignments = student.getAssignments();
-					if (testStudentID.equals(studentID)) {
-						writer.append(NEW_LINE_SEPARATOR);
-						writer.append(studentID);
-						writer.append(COMMA_DELIMITER);
-						writer.append(courseName);
-						writer.append(COMMA_DELIMITER);
-						writer.append(semester);
-						writer.append(COMMA_DELIMITER);
-						writer.append(year.toString());
-						writer.append(COMMA_DELIMITER);
-						for (int k = 0; k < assignments.size(); k++) {
-							writer.append(assignments.get(k).getName());
-							writer.append(COMMA_DELIMITER);
-							writer.append(Integer.toString(assignments.get(k).getGrade()));
-							writer.append(NEW_LINE_SEPARATOR);
-						}
 
-					} else
-						System.out.println("Student is not found");
+					if (testStudentID.equals(studentID)) {
+						// bWriter.append(NEW_LINE_SEPARATOR);
+						bWriter.append(studentID);
+						bWriter.append(COMMA_DELIMITER);
+						bWriter.append(courseName);
+						bWriter.append(COMMA_DELIMITER);
+						bWriter.append(semester);
+						bWriter.append(COMMA_DELIMITER);
+						bWriter.append(year.toString());
+						bWriter.append(COMMA_DELIMITER);
+						for (int k = 0; k < assignments.size(); k++) {
+							bWriter.append(assignments.get(k).getName());
+							bWriter.append(COMMA_DELIMITER);
+							bWriter.append(Integer.toString(assignments.get(k).getGrade()));
+							bWriter.append(NEW_LINE_SEPARATOR);
+						}
+						bWriter.flush();
+						System.out.println("FIle has been written");
+					}
+
 				}
 			}
 
 		}
+
 	}
 
 }
