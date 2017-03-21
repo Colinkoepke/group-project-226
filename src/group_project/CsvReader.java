@@ -21,7 +21,12 @@ public class CsvReader {
 
 		//Reading Each line of the file
 		while ((line = reader.readLine()) != null) {
-			String [] temp = line.split(",");//Splitting up the line of read data 
+			String [] temp = line.split(","); //Splitting up the line of read data
+			for (String s : temp) {
+				String str = s.replaceAll("^\"|\"$", "");
+				s = str;
+				//System.out.println(s);
+			}
 			List<String> row = new ArrayList<String>();//Allows an undefined num of elements in the row
 			
 			//Adding the read row of elements to the list of data
@@ -90,7 +95,7 @@ public class CsvReader {
 	 * string values to needed data fields
 	 */
 	public Student parseData(List<List<String>> data, List<String> row) {
-		 String name = "", id = " ";
+		 String name = "", id = "";
 		 ArrayList<Assignment> assignments = new ArrayList<>();
 		 Student student = null;
 		 double totGrade = 0;
