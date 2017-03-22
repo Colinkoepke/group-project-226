@@ -10,40 +10,20 @@ import java.util.*;
 public class CsvReader {
 
 	private ArrayList<String> assignmentHeads = new ArrayList<String>();
-	
-	public List<Student> read(File csvFile) throws IOException {
-		
-		List<Student> parsedList = new ArrayList<Student>();
-		List<List<String>> data = new ArrayList<List<String>>();//Holds each row of data 
+
+	public List<List<String>> read(File csvFile) throws IOException{
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
 		String line = null;
-		int passHeader = 0; 
+		List<List<String>> data = new ArrayList<List<String>>();
 
-		//Reading Each line of the file
-		while ((line = reader.readLine()) != null) {
-			String [] temp = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1); //Splitting up the line of read data
-			for (String s : temp) {
-				//String str = s.replaceAll("^\"|\"$", "");
-				//s = str;
-				System.out.println(s);
-			}
-			List<String> row = new ArrayList<String>();//Allows an undefined num of elements in the row
-			
-			//Adding the read row of elements to the list of data
+		while((line = reader.readLine())!= null){
+			String [] temp = line.split(",");
+			List<String> row = new ArrayList<String>();
 			row = Arrays.asList(temp);
 			data.add(row);
-
-            if(passHeader == 0) {
-                assignmentHeads.addAll(parseHeaders(row));
-				passHeader++;
-			} else {
-				parsedList.add(parseData(data, row));
-			}
-			
 		}
 		reader.close();
-		data.clear();
-		return parsedList;
+		return data;
 	}
 	
 	public List<String> parseHeaders(List<String> row) {
@@ -94,48 +74,69 @@ public class CsvReader {
 	 * to the in the same column as the parsed headers as well as converting
 	 * string values to needed data fields
 	 */
-	public Student parseData(List<List<String>> data, List<String> row) {
-		 String name = "", id = " ";
-		 ArrayList<Assignment> assignments = new ArrayList<>();
-		 Student student = null;
-		 double totGrade = 0;
-		 char letGrade = '\0';
-		 
-		 Iterator <List<String>> dataIter = data.iterator();//to get the read data
-         List<String> dataLine = dataIter.next();
-		 Iterator <String> headerRowIter = dataLine.iterator();//to iterate through the headerRow
-	
-		 while (headerRowIter.hasNext()) {
-			 Iterator <String> rowIter = row.iterator();//Iterate through the row being read in csv file
-			 while (rowIter.hasNext()) {
-                 String headerLine = headerRowIter.next();
-                 String line = rowIter.next();
-				 if (headerLine.toLowerCase().contains("name")) {
-					 String fName = "", lName = "";
-					 if (headerLine.toLowerCase().equals("student name") || headerLine.toLowerCase().equals("name")) {
-							name = line;
-					 } else if (headerLine.toLowerCase().contains("first")) {
-							fName = line;
-					 } else if(headerLine.toLowerCase().contains("last")) {
-							lName = line;
-					 }
-					 name = fName + lName;
-				 } else if(headerLine.toLowerCase().contains("user")) {
-					 id = line;
-				 } else if (headerLine.toLowerCase().contains("grade")) {
-					 letGrade = line.charAt(0);
-				 } else if (headerLine.toLowerCase().contains("total")) {
-					 totGrade = Double.parseDouble(line);
-				 } else {
-					 Assignment assignment = new Assignment();
-					 int grade = Integer.parseInt(line);
-					 assignment.setGrade(grade);
-					 assignments.add(assignment);
-				 }
-			 }
-		 }
-		 student = new Student(name, id, assignments, totGrade, letGrade);
-		 return student;
+	public static List<Student> parseData(List<List<String>> data){
+
+		List<Student> students = new ArrayList<Student>();
+		Student stud = null;
+		double totGrade = 0;
+		char letGrade = '\0';
+		String name = " ", id = " ";
+		ArrayList<Assignment> assignments = null;
+		ArrayList<String> headers = new ArrayList<String>();
+
+		Iterator <List<String>> dataList = data.iterator();
+		Iterator <String> headerRow = dataList.next().iterator();
+
+		while(headerRow.hasNext()){
+			headers.add(headerRow.next());
+
+		}
+
+		while(dataList.hasNext()){
+
+			assignments = new ArrayList<Assignment>();
+			Iterator <String> dataRow = dataList.next().iterator();
+			for(int i = 0; i < headers.size(); i++){
+				if(headers.get(i).toLowerCase().contains("name")){
+					//System.out.println(i);
+					if(headers.get(i).toLowerCase().contains("first")){
+						//System.out.println(i);
+						String fName = " ", lName = " ";
+						fName = dataRow.next();
+						i++;
+						lName = dataRow.next();
+						name = fName + " " + lName;
+						//System.out.println(name);
+					}else {
+						name = dataRow.next() + dataRow.next();
+						name = name.replace("\"","");
+						name.replaceAll("/[ ]*,[ ]*|[ ]+/g","");
+					}
+					//else if(!(headers.get(i+1).toLowerCase()))
+					//}
+
+				}
+				else if(headers.get(i).toLowerCase().equals("user id") || headers.get(i).toLowerCase().equals("student id") ){
+					id = dataRow.next();
+					//System.out.println(id);
+				}
+				else if(headers.get(i).toLowerCase().contains("total")){
+					totGrade = Double.parseDouble(dataRow.next());
+					//System.out.println(totGrade);
+				}
+				else if(headers.get(i).toLowerCase().contains("grade")){
+					letGrade = dataRow.next().charAt(0);
+					//System.out.println(letGrade);
+				}
+				else{
+					assignments.add(new Assignment("", dataRow.next()));
+				}
+
+			}
+			stud = new Student(name, id, assignments, totGrade, letGrade);
+			students.add(stud);
+		}
+		return students;
 	}
 
     public ArrayList<String> getAssignmentHeads() {

@@ -3,6 +3,7 @@ package group_project;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Brandon Manke
@@ -34,18 +35,21 @@ public class Listener {
         File folder = new File("data/");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
-            System.out.println(file.getName());
+            System.out.println(file.isFile());
             if (file.isFile() && (file.getName().equals(fileName))) {
                 // wtf
                 try {
-                    ArrayList<Student> students = new ArrayList<>(reader.read(file));
-                    for (Student student : students) {
+                    //ArrayList<Student> students = new ArrayList<>(reader.read(file));
+                    List<List<String>> input = reader.read(file);
+                    List<Student> students = reader.parseData(input);
+
+                    /*for (Student student : students) {
                         student.setAllAssignments(
                                 formatAssignments(student.getAssignments(), reader.getAssignmentHeads())
                         );
-                    }
+                    }*/
                     System.out.println("Students size: " + students.size());
-                    course.addAllStudents(students);
+                    course.addAllStudents((ArrayList<Student>) students);
                 } catch (IOException e) {
                     System.err.println("File read error");
                     e.getStackTrace();

@@ -90,7 +90,7 @@ public class CLI {
                 listener.addFile(fileName);
                 for (Course c : Repository.getCourses()) {
                     for (Student s : c.getStudents()) {
-                        System.out.println(s.getName());
+                        System.out.println(s.getName() + "\n" + s.getUserID() + "\n");
                     }
                 }
             } else if (split.length == 1) {
@@ -100,7 +100,7 @@ public class CLI {
                 listener.addFile(fileName);
                 for (Course c : Repository.getCourses()) {
                     for (Student s : c.getStudents()) {
-                        System.out.println(s.getName());
+                        System.out.println(s.getName() + "\n" + s.getUserID() + "\n");
                     }
                 }
             } else {

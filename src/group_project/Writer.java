@@ -101,7 +101,7 @@ public class Writer {
 						for (int k = 0; k < assignments.size(); k++) {
 							bWriter.append(assignments.get(k).getName());
 							bWriter.append(COMMA_DELIMITER);
-							bWriter.append(Integer.toString(assignments.get(k).getGrade()));
+							bWriter.append(assignments.get(k).getGrade());
 							bWriter.append(NEW_LINE_SEPARATOR);
 						}
 						bWriter.flush();

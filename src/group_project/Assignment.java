@@ -5,9 +5,9 @@ package group_project;
  */
 public class Assignment {
     private String name;
-    private int grade;
+    private String grade;
 
-    public Assignment(String name, int grade) {
+    public Assignment(String name, String grade) {
         this.name = name;
         this.grade = grade;
     }
@@ -18,15 +18,15 @@ public class Assignment {
 
     public String getName() { return name; }
 
-    public int getGrade() { return grade; }
+    public String getGrade() { return grade; }
 
     public String setName(String name) {
         this.name = name;
         return name;
     }
 
-    public int setGrade(int grade) {
-        if (grade < 0) {
+    public String setGrade(String grade) {
+        if (Integer.parseInt(grade) < 0) {
             throw new IllegalArgumentException();
         }
         this.grade = grade;

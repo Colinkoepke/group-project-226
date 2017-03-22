@@ -57,4 +57,8 @@ public class Student {
         this.assignments = assignments;
         return assignments;
     }
+
+    public String toString() {
+        return this.name + " " + this.userID + " " +  this.assignments + " " + this.totalGrade + " " + this.letterGrade;
+    }
 }
