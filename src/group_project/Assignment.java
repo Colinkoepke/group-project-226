@@ -1,7 +1,8 @@
 package group_project;
 
 /**
- * @author Brandon Manke
+ * Assignment Class
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Assignment {
     private String name;

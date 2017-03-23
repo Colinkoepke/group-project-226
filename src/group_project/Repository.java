@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * This is a simple repository class to store our constant list of courses
  * There is probably a better way of handling this but whatever, it works
- * @author Brandon Manke
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Repository {
     // constant, because there is only one set of courses

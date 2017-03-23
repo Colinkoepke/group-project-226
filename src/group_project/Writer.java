@@ -9,7 +9,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * @author Colin Koepke
+ * Writer class
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Writer {
 

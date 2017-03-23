@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Brandon Manke
+ * Listener class
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Listener {
     // I don't think we need to store anything in this class, but we will see

@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
-
+/**
+ * CsvReader class
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
+ */
 public class CsvReader {
 
 	private List<String> assignmentHeads = new ArrayList<String>();

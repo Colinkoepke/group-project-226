@@ -1,12 +1,10 @@
 package group_project;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
- * Consider adding first name and last names to this. Depends on how reader reads values.
- * @author Brandon Manke
+ * Student class
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Student {
     private String name;

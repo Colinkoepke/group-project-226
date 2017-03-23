@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Course object class
- * @author Brandon Manke
+ * @author Brandon Manke, Colin Koepke, Ben Dworkin
  */
 public class Course {
     private ArrayList<Student> students = new ArrayList<>();
