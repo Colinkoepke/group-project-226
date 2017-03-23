@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class CsvReader {
 
-	private ArrayList<String> assignmentHeads = new ArrayList<String>();
+	private List<String> assignmentHeads = new ArrayList<String>();
 
 	public List<List<String>> read(File csvFile) throws IOException{
 		BufferedReader reader = new BufferedReader(new FileReader(csvFile));
@@ -22,6 +23,8 @@ public class CsvReader {
 			row = Arrays.asList(temp);
 			data.add(row);
 		}
+		assignmentHeads = parseHeaders(data.get(0)); // parsing headers
+
 		reader.close();
 		return data;
 	}
@@ -53,7 +56,7 @@ public class CsvReader {
 					hName = hFName + hLName;
 					parsedHeadingRow.add(hName);
 				}
-			} else if (nextLine.toLowerCase().contains("id")) {
+			} else if (nextLine.toLowerCase().equals("user id") || nextLine.toLowerCase().equals("student id")) {
 				hId = nextLine;
 				parsedHeadingRow.add(hId);
 			} else if(nextLine.toLowerCase().contains("grade")) {
@@ -89,7 +92,6 @@ public class CsvReader {
 
 		while(headerRow.hasNext()){
 			headers.add(headerRow.next());
-
 		}
 
 		while(dataList.hasNext()){
@@ -112,9 +114,6 @@ public class CsvReader {
 						name = name.replace("\"","");
 						name.replaceAll("/[ ]*,[ ]*|[ ]+/g","");
 					}
-					//else if(!(headers.get(i+1).toLowerCase()))
-					//}
-
 				}
 				else if(headers.get(i).toLowerCase().equals("user id") || headers.get(i).toLowerCase().equals("student id") ){
 					id = dataRow.next();
@@ -140,19 +139,20 @@ public class CsvReader {
 	}
 
     public ArrayList<String> getAssignmentHeads() {
-        return assignmentHeads;
+        return (ArrayList<String>) assignmentHeads;
     }
-
+	/*
     public ArrayList<String> formatAssignmentHeaders() {
         ArrayList<String> projectNames = new ArrayList<>();
         for (String str : assignmentHeads) {
             String temp = str.toLowerCase();
+			System.out.println(temp);
             // checks if it's not an assignment name
-            if (temp.contains("name") || temp.contains("total") ||
-                    temp.contains("id") || temp.contains("grade")) {
+            if (!(temp.contains("name") || temp.contains("total") ||
+                    temp.equals("user id") || temp.equals("student id") || temp.contains("grade"))) {
                 projectNames.add(str);
             }
         }
         return projectNames;
-    }
+    }*/
 }

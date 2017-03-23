@@ -1,5 +1,6 @@
 package group_project;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
@@ -42,15 +43,37 @@ public class CLI {
                 System.out.println("Exiting program...");
                 running = false;
             } else if ((Character.toString(input.charAt(0))).equals("a")) { // check for a in statement
-                addFile(input);
+                try {
+                    addFile(input);
+                } catch (Exception e) {
+                    do {
+                        System.err.println("Invalid input, please try again.");
+                        input = getInput();
+                    } while (input.isEmpty());
+                }
             } else if ((Character.toString(input.charAt(0))).equals("s")) { // check for s in statement
-                studentInfo(input);
+                try {
+                    studentInfo(input);
+                } catch (Exception e) {
+                     do {
+                        System.err.println("Invalid input, please try again.");
+                        input = getInput();
+                    } while (input.isEmpty());
+                }
             } else if ((Character.toString(input.charAt(0))).equals("g")) { // check for g in statement
-                getGrades(input);
+                try {
+                    getGrades(input);
+                } catch (Exception e) {
+                    do {
+                        System.err.println("Invalid input, please try again.");
+                        input = getInput();
+                    } while (input.isEmpty());
+                }
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");
             }
+            running = true;
         }
     }
 
@@ -87,21 +110,19 @@ public class CLI {
             if (split.length == 2) {
                 fileName = split[1];
                 System.out.println("Reading: " + fileName);
-                listener.addFile(fileName);
-                for (Course c : Repository.getCourses()) {
-                    for (Student s : c.getStudents()) {
-                        System.out.println(s.getName() + "\n" + s.getUserID() + "\n");
-                    }
+                try {
+                    listener.addFile(fileName);
+                } catch (FileNotFoundException e) {
+                    System.err.println("File Not Found Sorry, please try again");
                 }
             } else if (split.length == 1) {
                 System.out.println("Please enter the file name:");
                 fileName = scanner.nextLine();
                 System.out.println("Reading: " + fileName);
-                listener.addFile(fileName);
-                for (Course c : Repository.getCourses()) {
-                    for (Student s : c.getStudents()) {
-                        System.out.println(s.getName() + "\n" + s.getUserID() + "\n");
-                    }
+                try {
+                    listener.addFile(fileName);
+                } catch (FileNotFoundException e) {
+                    System.err.println("File Not Found Sorry, please try again");
                 }
             } else {
                 System.out.println();
@@ -124,9 +145,11 @@ public class CLI {
                 studentID = split[1];
                 fileName = split[2];
                 System.out.println("Exporting student info..");
-                // get student info function:
-                // ...
-                listener.getStudent(studentID, fileName);
+                try {
+                    listener.getStudent(studentID, fileName);
+                } catch (Exception e) {
+                    System.err.println("Student Not Found Sorry, please try again");
+                }
             } else if (split.length == 2) {
                 studentID = split[1];
                 do {
@@ -134,7 +157,11 @@ public class CLI {
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
                 System.out.println("Exporting student info..");
-                listener.getStudent(studentID, fileName);
+                try {
+                    listener.getStudent(studentID, fileName);
+                } catch (Exception e) {
+                    System.err.println("Student Not Found Sorry, please try again");
+                }
             } else if (split.length == 1) {
                 do {
                     System.out.println("Please enter the students id:");
@@ -147,8 +174,11 @@ public class CLI {
                     fileName = scanner.nextLine();
                 } while (fileName.isEmpty());
                 System.out.println("Exporting student info..");
-                listener.getStudent(studentID, fileName);
-                // ...
+                try {
+                    listener.getStudent(studentID, fileName);
+                } catch (Exception e) {
+                    System.err.println("Class Not Found Sorry, please try again");
+                }
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");
@@ -178,8 +208,16 @@ public class CLI {
                     return;
                 }
                 System.out.println("Getting grade info..");
-                // pass into function
-                // ...
+                try {
+                    int[] grades = listener.getGrades(courseNumber, semester, year);
+                    System.out.println("Students with A's: " + grades[0]);
+                    System.out.println("Students with B's: " + grades[1]);
+                    System.out.println("Students with C's: " + grades[2]);
+                    System.out.println("Students with D's: " + grades[3]);
+                    System.out.println("Students with F's: " + grades[4]);
+                } catch (Exception e) {
+                    System.err.println("Class Not Found Sorry, please try again");
+                }
             } else if (split.length == 2) {
                 courseNumber = split[1];
                 do {
@@ -198,8 +236,16 @@ public class CLI {
                     return;
                 }
                 System.out.println("Getting grade info..");
-                // pass into function
-                // ...
+                try {
+                    int[] grades = listener.getGrades(courseNumber, semester, year);
+                    System.out.println("Students with A's: " + grades[0]);
+                    System.out.println("Students with B's: " + grades[1]);
+                    System.out.println("Students with C's: " + grades[2]);
+                    System.out.println("Students with D's: " + grades[3]);
+                    System.out.println("Students with F's: " + grades[4]);
+                } catch (Exception e) {
+                    System.err.println("Class Not Found Sorry, please try again");
+                }
             } else if (split.length == 1) {
                 do {
                     System.out.println("Please enter the course number of the class: (enter 'none' if unknown)"); // need input validation
@@ -223,8 +269,16 @@ public class CLI {
                     return;
                 }
                 System.out.println("Getting grade info..");
-                // pass into function
-                // ...
+                try {
+                    int[] grades = listener.getGrades(courseNumber, semester, year);
+                    System.out.println("Students with A's: " + grades[0]);
+                    System.out.println("Students with B's: " + grades[1]);
+                    System.out.println("Students with C's: " + grades[2]);
+                    System.out.println("Students with D's: " + grades[3]);
+                    System.out.println("Students with F's: " + grades[4]);
+                } catch (Exception e) {
+
+                }
             } else {
                 System.out.println();
                 System.err.println("Invalid input, please try again.");

@@ -1,6 +1,7 @@
 package group_project;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,13 @@ public class Listener {
      * @return {Course} - returns a course object, with all of the information from
      * the csv file to be sent to the repository.
      */
-    public Course addFile(String fileName) {
-        // TODO: Current issues last name is printed twice (I think) in student object, also '"' in name throw errors
+    public Course addFile(String fileName) throws FileNotFoundException {
+        File folder = new File("data/");
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles)
+            if (!file.isFile() && !(fileName.equals(file.getName())))
+                throw new FileNotFoundException();
+
         String[] formattedName = formatFileName(fileName);
         CsvReader reader = new CsvReader();
 
@@ -32,23 +38,20 @@ public class Listener {
         course.setSemester(formattedName[1]);
         course.setYear(Integer.parseInt(formattedName[2]));
 
-        File folder = new File("data/");
-        File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
-            System.out.println(file.isFile());
             if (file.isFile() && (file.getName().equals(fileName))) {
-                // wtf
                 try {
-                    //ArrayList<Student> students = new ArrayList<>(reader.read(file));
                     List<List<String>> input = reader.read(file);
                     List<Student> students = reader.parseData(input);
-
-                    /*for (Student student : students) {
-                        student.setAllAssignments(
-                                formatAssignments(student.getAssignments(), reader.getAssignmentHeads())
-                        );
-                    }*/
-                    System.out.println("Students size: " + students.size());
+                    ArrayList<String> assignmentHeaders = reader.getAssignmentHeads();
+                    for (Student student : students) {
+                        ArrayList<Assignment> temp = new ArrayList<>();
+                        ArrayList<Assignment> oldAssignments = student.getAssignments();
+                        for (int i = 0; i < oldAssignments.size(); i++) {
+                            temp.add(new Assignment(assignmentHeaders.get(i), oldAssignments.get(i).getGrade()));
+                        }
+                        student.setAllAssignments(temp);
+                    }
                     course.addAllStudents((ArrayList<Student>) students);
                 } catch (IOException e) {
                     System.err.println("File read error");
@@ -73,13 +76,14 @@ public class Listener {
      * @param exportFileName {String} - name of file to be created and exported
      * @return {Student} returns a student object possible to be passed somewhere? the return here is not finalized yet
      */
-    public void getStudent(String userID, String exportFileName) {
+    public void getStudent(String userID, String exportFileName) throws IOException {
         Writer writer = new Writer(userID, exportFileName);
         try {
 			writer.writeToCSV();
 		} catch (IOException e) {
 			System.out.println("File not found");
 			e.printStackTrace();
+            throw e;
 		}
     }
 
@@ -92,9 +96,79 @@ public class Listener {
      * @return {int[]} - Returns an array of integers counting the number of people who received A's, B's, C's, etc.
      * A's represent 0th index, B's the 1st index, and so on.
      */
-    public int[] getGrades(String courseNumber, String semester, int year) {
-        // TODO
-        return null;
+    public int[] getGrades(String courseNumber, String semester, String year) throws Exception {
+        int[] grades = null;
+        courseNumber = courseNumber.toLowerCase();
+        semester = semester.toLowerCase();
+        year = year.toLowerCase();
+
+        if (courseNumber.equals("none")) {
+            for (Course c : Repository.getCourses()) {
+                if (semester.equals(c.getSemester()) && year.equals(Integer.toString(c.getYear()))) {
+                    try {
+                        grades = calculateGrades(c);
+                    } catch (Exception e) {
+                        throw e;
+                    }
+                } else {
+                    System.out.println("Class not found, sorry. Try adding it to the repository.");
+                }
+            }
+        } else if (semester.equals("none") || year.equals("none")) {
+            for (Course c : Repository.getCourses()) {
+                if (courseNumber.equals(c.getName())) {
+                    try {
+                        grades = calculateGrades(c);
+                    } catch (Exception e) {
+                        throw e;
+                    }
+                } else {
+                    System.out.println("Class not found, sorry. Try adding it to the repository.");
+                }
+            }
+        } else {
+            for (Course c : Repository.getCourses()) {
+                if (courseNumber.equals(c.getName()) && semester.equals(c.getSemester()) && year.equals(Integer.toString(c.getYear()))) {
+                    try {
+                        grades = calculateGrades(c);
+                    } catch (Exception e) {
+                        throw e;
+                    }
+                } else {
+                    System.out.println("Class not found, sorry. Try adding it to the repository.");
+                }
+            }
+        }
+
+        if (grades != null)
+            return grades;
+        else
+            throw new NullPointerException();
+    }
+
+    private static int[] calculateGrades(Course course) {
+        int[] grades = new int[5];
+        for (int i = 0; i < grades.length; i++) {
+            grades[i] = 0;
+        }
+
+        for (Student s : course.getStudents()) {
+            if (s.getLetterGrade() == 'A' || s.getLetterGrade() == 'a') {
+                grades[0]++;
+            } else if (s.getLetterGrade() == 'B' || s.getLetterGrade() == 'b') {
+                grades[1]++;
+            } else if (s.getLetterGrade() == 'C' || s.getLetterGrade() == 'c') {
+                grades[2]++;
+            } else if (s.getLetterGrade() == 'D' || s.getLetterGrade() == 'd') {
+                grades[3]++;
+            } else if (s.getLetterGrade() == 'F' || s.getLetterGrade() == 'f') {
+                grades[4]++;
+            }
+        }
+        for (int i : grades) {
+            System.out.println(i);
+        }
+        return grades;
     }
 
     private static String[] formatFileName(String fileName) {
@@ -102,14 +176,6 @@ public class Listener {
         String[] formatted = temp.split("[-\\s]"); // puts remaining file into array so parts can be read
         return formatted;
     }
-
-    private static ArrayList<Assignment> formatAssignments(ArrayList<Assignment> assignments, ArrayList<String> header) {
-        for (int i = 0; i < assignments.size(); i++) {
-            assignments.get(i).setName(header.get(i)); // maybe this works idfk
-        }
-        return assignments;
-    }
-
 
     /**
      * Compares course to be added to all courses currently in repository, if it already exists then it returns true
@@ -124,19 +190,6 @@ public class Listener {
             }
         }
         return false;
-    }
-
-    /**
-     * May or may not end up using this
-     * Reads & formats students from CsvReader, since it only returns a list of students
-     * We have to format it and put it into a course object
-     * @param reader { CsvReader } - Class that reads specified .csv files
-     * @param fileName { String } - Name of file to read
-     */
-    private static Course readAndFormatStudents(CsvReader reader, String fileName) {
-        Course course = new Course();
-
-        return course;
     }
 
 }

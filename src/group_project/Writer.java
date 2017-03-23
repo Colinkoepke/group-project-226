@@ -102,10 +102,13 @@ public class Writer {
 							bWriter.append(assignments.get(k).getName());
 							bWriter.append(COMMA_DELIMITER);
 							bWriter.append(assignments.get(k).getGrade());
-							bWriter.append(NEW_LINE_SEPARATOR);
+							if (k != assignments.size() - 1) {
+								bWriter.append(COMMA_DELIMITER);
+							}
 						}
+						bWriter.append(NEW_LINE_SEPARATOR);
 						bWriter.flush();
-						System.out.println("FIle has been written");
+						System.out.println("File has been written");
 					}
 
 				}
